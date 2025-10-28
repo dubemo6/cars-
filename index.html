@@ -178,37 +178,6 @@
     </footer>
 
 
-    <!-- 
-        4. JAVASCRIPT FOR SCROLL BEHAVIOR
-        - This script handles the Navbar transition from transparent to black.
-    -->
-    <script>
-        // Use a window.onload to ensure all elements are ready
-        window.onload = function() {
-            const header = document.getElementById('main-nav');
-            // Scroll distance (in pixels) to trigger the class change
-            const scrollPoint = 100; 
-            
-            // Function to check scroll position and update header classes
-            function handleScroll() {
-                if (window.scrollY > scrollPoint) {
-                    // Scrolled State: Add black background and shadow
-                    header.classList.add('bg-black', 'shadow-2xl', 'backdrop-blur-sm', 'bg-opacity-95');
-                    header.classList.remove('bg-transparent');
-                } else {
-                    // Top State: Remove black background and shadow
-                    header.classList.remove('bg-black', 'shadow-2xl', 'backdrop-blur-sm', 'bg-opacity-95');
-                    header.classList.add('bg-transparent');
-                }
-            }
-
-            // Call the function once on load in case the user reloads while scrolled
-            handleScroll(); 
-
-            // Attach the function to the scroll event
-            window.addEventListener('scroll', handleScroll);
-        };
-    </script>
 
 </body>
 </html>
