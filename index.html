@@ -9,20 +9,88 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7f7f7; /* Light background for contrast */
+            background-color: #f7f7f7;
         }
-        /* Custom class for smooth scrolling to sections */
+        /* Ensure smooth scrolling for anchors */
         .scroll-smooth {
             scroll-behavior: smooth;
         }
-        /* Mobile Menu Visibility Helper - only needed if you were to implement a real mobile menu */
-        .mobile-menu-open {
-            /* Example: prevent background scroll when menu is open */
-            overflow: hidden; 
+
+        /* -------------------------------------- */
+        /* 1. SCROLL REVEAL CSS CLASSES (Updated to 5.0s duration for a super slow reveal) */
+        /* -------------------------------------- */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(60px); 
+            /* DURATION: Increased to 5.0s for an extremely slow, graceful reveal */
+            transition: opacity 2s ease-out, transform 2s ease-out; 
+            /* BASE DELAY: Minimal delay, individual elements use inline styles for staggering */
+            transition-delay: 0.5s; 
         }
+        .reveal-element.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* -------------------------------------- */
+        /* 2. CUSTOM SHADOW AND HOVER LIFT */
+        /* -------------------------------------- */
+        /* Deep black shadow with a subtle purple glow */
+        .premium-shadow {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 10px rgba(160, 32, 240, 0.2); 
+        }
+        /* Hover effect to lift the box slightly */
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            /* Darker shadow on hover for contrast */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 15px rgba(160, 32, 240, 0.4);
+        }
+
+        /* -------------------------------------- */
+        /* 3. MOBILE MENU CSS CLASSES */
+        /* -------------------------------------- */
+        #mobile-menu {
+            transition: right 0.3s ease-in-out;
+            right: -100%; 
+        }
+        #mobile-menu.menu-open {
+            right: 0; 
+        }
+        .mobile-menu-active {
+            overflow: hidden;
+        }
+
     </style>
 </head>
 <body class="min-h-screen scroll-smooth">
+
+    <!-- MOBILE NAVIGATION OVERLAY -->
+    <div 
+        id="mobile-menu" 
+        class="fixed top-0 w-3/4 h-full bg-black z-[100] p-8 premium-shadow md:hidden"
+    >
+        <div class="flex justify-end mb-10">
+            <button id="close-menu-btn" class="text-white focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-6 text-xl">
+            <a href="#hero" class="text-white hover:text-[#A020F0] transition duration-300 font-medium" data-menu-item>Home</a>
+            <a href="#services" class="text-white hover:text-[#A020F0] transition duration-300 font-medium" data-menu-item>Services</a>
+            <a href="#about" class="text-white hover:text-[#A020F0] transition duration-300 font-medium" data-menu-item>Our Expertise</a>
+            <a href="#portfolio" class="text-white hover:text-[#A020F0] transition duration-300 font-medium" data-menu-item>Our Work</a>
+            <a 
+                href="#contact" 
+                class="mt-8 bg-[#A020F0] hover:bg-opacity-80 text-white font-semibold py-3 px-4 rounded-full transition duration-300 text-base text-center"
+                data-menu-item
+            >
+                Book Service Now
+            </a>
+        </nav>
+    </div>
+    <!-- END MOBILE NAVIGATION -->
 
     <header 
         id="main-nav" 
@@ -39,7 +107,7 @@
                 <a href="#portfolio" class="text-white text-sm lg:text-base hover:text-[#A020F0] transition duration-300 font-medium">Our Work</a>
             </nav>
             
-            <button class="md:hidden text-white focus:outline-none" aria-label="Open Menu">
+            <button id="open-menu-btn" class="md:hidden text-white focus:outline-none" aria-label="Open Menu">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -47,7 +115,7 @@
 
             <a 
                 href="#contact" 
-                class="bg-[#A020F0] hover:bg-opacity-80 text-white font-semibold py-2 px-3 md:px-4 rounded-full transition duration-300 text-xs md:text-sm shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-[#A020F0]/50"
+                class="hidden sm:inline-block bg-[#A020F0] hover:bg-opacity-80 text-white font-semibold py-2 px-3 md:px-4 rounded-full transition duration-300 text-xs md:text-sm shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-[#A020F0]/50"
             >
                 Book Service Now
             </a>
@@ -55,7 +123,7 @@
     </header>
 
     <main id="hero" class="w-full bg-gray-900 text-white pt-24 pb-12 h-auto min-h-screen flex items-center">
-        <div class="container mx-auto px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-32 py-20">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-32 py-20 reveal-element is-visible">
             <span class="text-[#A020F0] text-sm font-semibold uppercase tracking-widest mb-4 block">Trusted by Luxury Brands</span>
             <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold mb-6 leading-tight">
                 40+ Years of Auto Repair <br class="hidden sm:inline">Excellence in Lagos.
@@ -82,11 +150,19 @@
 
     <section id="services" class="py-16 md:py-20 bg-white">
         <div class="container mx-auto px-4 md:px-8 lg:px-12 xl:px-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center">Comprehensive Auto Care</h2>
-            <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10 md:mb-12">We cover every aspect of vehicle maintenance and repair, using state-of-the-art equipment and time-tested experience.</p>
+            <!-- Header text for services, applied reveal effect -->
+            <div class="reveal-element" style="transition-delay: 0.5s;">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center">Comprehensive Auto Care</h2>
+                <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10 md:mb-12">We cover every aspect of vehicle maintenance and repair, using state-of-the-art equipment and time-tested experience.</p>
+            </div>
 
+            <!-- Service Boxes: Updated with 5.0s transition and staggered delays -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 border-t-4 border-[#A020F0]">
+                <!-- Box 1: Mechanical & Electrical (Starts first) -->
+                <div 
+                    class="bg-gray-50 p-6 rounded-lg premium-shadow hover-lift transition duration-300 border-t-4 border-[#A020F0] reveal-element"
+                    style="transition-delay: 0.5s;"
+                >
                     <h3 class="text-xl font-semibold text-gray-900 mb-3">Mechanical & Electrical</h3>
                     <p class="text-gray-600 mb-4 text-sm">Expert diagnostics, engine repair, complex wiring, A/C system service, and general maintenance to keep your car running perfectly.</p>
                     <ul class="list-disc list-inside text-sm text-gray-700">
@@ -96,7 +172,11 @@
                     </ul>
                 </div>
 
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 border-t-4 border-[#A020F0]">
+                <!-- Box 2: Bodywork & Painting (Starts second) -->
+                <div 
+                    class="bg-gray-50 p-6 rounded-lg premium-shadow hover-lift transition duration-300 border-t-4 border-[#A020F0] reveal-element"
+                    style="transition-delay: 1s;"
+                >
                     <h3 class="text-xl font-semibold text-gray-900 mb-3">Bodywork & Painting</h3>
                     <p class="text-gray-600 mb-4 text-sm">From collision repair and dent removal to professional vehicle painting and flawless finishing.</p>
                     <ul class="list-disc list-inside text-sm text-gray-700">
@@ -106,7 +186,11 @@
                     </ul>
                 </div>
 
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 border-t-4 border-[#A020F0]">
+                <!-- Box 3: Specialized Support (Starts last) -->
+                <div 
+                    class="bg-gray-50 p-6 rounded-lg premium-shadow hover-lift transition duration-300 border-t-4 border-[#A020F0] reveal-element"
+                    style="transition-delay: 1.4s;"
+                >
                     <h3 class="text-xl font-semibold text-gray-900 mb-3">Specialized Support</h3>
                     <p class="text-gray-600 mb-4 text-sm">Hassle-free insurance claim processing and dedicated management for business fleets.</p>
                     <ul class="list-disc list-inside text-sm text-gray-700">
@@ -117,7 +201,7 @@
                 </div>
             </div>
             
-            <div class="text-center mt-10 md:mt-12">
+            <div class="text-center mt-10 md:mt-12 reveal-element" style="transition-delay: 3.5s;">
                  <a 
                     href="#contact" 
                     class="text-white bg-[#A020F0] hover:bg-opacity-90 font-bold py-3 px-8 rounded-full transition duration-300 text-base shadow-lg"
@@ -131,7 +215,8 @@
     <section id="about" class="py-16 md:py-20 bg-gray-900 text-white">
         <div class="container mx-auto px-4 md:px-8 lg:px-12 xl:px-20">
             <div class="md:flex md:space-x-12 items-center flex-col md:flex-row">
-                <div class="md:w-1/2 mb-8 md:mb-0">
+                <!-- Left Text Column: Applied reveal-element -->
+                <div class="md:w-1/2 mb-8 md:mb-0 reveal-element" style="transition-delay: 0.5s;">
                     <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Commitment: Experience You Can Trust</h2>
                     <p class="text-base md:text-lg text-gray-300 mb-6">
                         Our team isn't just experienced; they are **master technicians** whose combined service history exceeds **40 years**. This deep expertise ensures every vehicle, from family saloon to high-performance luxury car, receives the highest level of care and precision.
@@ -140,14 +225,20 @@
                         We are uniquely equipped to handle the specialized needs of **Lexus, Bentley, Mercedes-Benz, and BMW**, providing dealership-quality service without the dealership price tag. Quality, transparency, and timely service are our core promises.
                     </p>
                 </div>
+                <!-- Right Stats Box: Removed reveal-element from the container and applied staggering internally -->
                 <div class="md:w-1/2">
-                    <div class="bg-gray-800 p-8 md:p-10 rounded-xl shadow-2xl border-t-4 border-[#A020F0] text-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-4 text-[#A020F0]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <!-- Updated shadow class on the stats box -->
+                    <div class="bg-gray-800 p-8 md:p-10 rounded-xl premium-shadow border-t-4 border-[#A020F0] text-center">
+                        <!-- Icon (Starts at 1.5s) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-4 text-[#A020F0] reveal-element" style="transition-delay: 1.5s;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                         </svg>
-                        <h3 class="text-xl font-semibold mb-2">Our Experience in Numbers</h3>
-                        <p class="text-4xl sm:text-5xl font-extrabold text-[#A020F0]">40+</p>
-                        <p class="text-gray-400">Years of Staff Expertise</p>
+                        <!-- Title (Starts at 2.0s) -->
+                        <h3 class="text-xl font-semibold mb-2 reveal-element" style="transition-delay: 2.0s;">Our Experience in Numbers</h3>
+                        <!-- Number (Starts at 2.5s) -->
+                        <p class="text-4xl sm:text-5xl font-extrabold text-[#A020F0] reveal-element" style="transition-delay: 2.5s;">40+</p>
+                        <!-- Label (Starts at 3.0s) -->
+                        <p class="text-gray-400 reveal-element" style="transition-delay: 3.0s;">Years of Staff Expertise</p>
                     </div>
                 </div>
             </div>
@@ -156,24 +247,28 @@
 
     <section id="portfolio" class="py-16 md:py-20 bg-gray-50">
         <div class="container mx-auto px-4 md:px-8 lg:px-12 xl:px-20 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Work Speaks for Itself</h2>
-            <p class="text-gray-600 max-w-3xl mx-auto mb-8 md:mb-10">
-                See the quality and precision we put into every job—from flawless paint finishes to complex engine rebuilds on luxury vehicles.
-            </p>
+            <!-- Applied reveal-element to portfolio section content -->
+            <div class="reveal-element" style="transition-delay: 0.5s;">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Work Speaks for Itself</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto mb-8 md:mb-10">
+                    See the quality and precision we put into every job—from flawless paint finishes to complex engine rebuilds on luxury vehicles.
+                </p>
+            </div>
             
-            <div class="w-full h-64 md:h-72 bg-gray-200 flex items-center justify-center rounded-xl mb-8">
+            <div class="w-full h-64 md:h-72 bg-gray-200 flex items-center justify-center rounded-xl mb-8 premium-shadow reveal-element" style="transition-delay: 1.5s;">
                 <p class="text-gray-500 font-medium">
                     [Placeholder for Embedded Instagram Feed / Gallery]
                 </p>
             </div>
 
-            <p class="text-base md:text-lg text-gray-700 mb-6">
-                heck the evidences on our Instagram store.**
+            <p class="text-base md:text-lg text-gray-700 mb-6 reveal-element" style="transition-delay: 2.5s;">
+                Check the evidences on our Instagram store.**
             </p>
             <a 
                 href="https://www.instagram.com/consolidaautocenter?igsh=MTh4OGdiaGxjYWh6Zw==" 
                 target="_blank"
-                class="bg-[#A020F0] hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition duration-300 text-base shadow-lg hover:shadow-xl inline-flex items-center justify-center w-full max-w-xs sm:w-64 mx-auto"
+                class="bg-[#A020F0] hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition duration-300 text-base shadow-lg hover:shadow-xl inline-flex items-center justify-center w-full max-w-xs sm:w-64 mx-auto reveal-element"
+                style="transition-delay: 3.5s;"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2.163c3.204 0 3.584.012 4.85.07c3.252.148 4.772 1.624 4.904 4.904.058 1.265.07 1.645.07 4.85 0 3.204-.012 3.584-.07 4.85-2.13 5.438-7.85 7.42-12.8 5.768-3.08-1.04-4.86-3.86-5.18-7.05-.058-1.265-.07-1.645-.07-4.85 0-3.204.012-3.584.07-4.85.132-3.251 1.608-4.772 4.904-4.904 1.265-.058 1.645-.07 4.85-.07zm0 1.84c-3.177 0-3.565.012-4.819.068-3.003.136-3.921 1.043-4.043 4.043-.056 1.254-.068 1.642-.068 4.819s.012 3.565.068 4.819c.122 3.003 1.04 3.921 4.043 4.043 1.254.056 1.642.068 4.819.068s3.565-.012 4.819-.068c3.003-.122 3.921-1.04 4.043-4.043.056-1.254.068-1.642.068-4.819s-.012-3.565-.068-4.819c-.122-3.003-1.04-3.921-4.043-4.043-1.254-.056-1.642-.068-4.819-.068zm0 2.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9zm0 1.84a2.66 2.66 0 110 5.32 2.66 2.66 0 010-5.32zm4.85-3.275a1.07 1.07 0 100 2.14 1.07 1.07 0 000-2.14z"/>
@@ -185,17 +280,22 @@
     
     <section id="contact" class="py-16 md:py-20 bg-white border-t border-gray-200">
         <div class="container mx-auto px-4 md:px-8 lg:px-12 xl:px-20">
-             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center">Get Your Free Quote</h2>
-             <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8 md:mb-10">Contact us today to discuss your repair needs or fleet management requirements. We are ready to help!</p>
+             <div class="reveal-element" style="transition-delay: 0.5s;">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center">Get Your Free Quote</h2>
+                <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8 md:mb-10">Contact us today to discuss your repair needs or fleet management requirements. We are ready to help!</p>
+             </div>
              
              <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10">
-                <div class="lg:col-span-2 bg-gray-50 p-6 md:p-8 rounded-lg shadow-xl">
+                <!-- Contact Form: Applied new shadow class -->
+                <div class="lg:col-span-2 bg-gray-50 p-6 md:p-8 rounded-lg premium-shadow reveal-element" style="transition-delay: 1.5s;">
                     <h3 class="text-xl md:text-2xl font-semibold mb-6 text-gray-900">Book Your Service</h3>
-                    <form action="#" method="POST" class="space-y-4">
+                    <form action="#" method="POST" id="service-form" class="space-y-4">
                         <input type="text" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-[#A020F0] focus:border-[#A020F0]">
                         <input type="email" placeholder="Your Email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-[#A020F0] focus:border-[#A020F0]">
                         <input type="tel" placeholder="Your Phone Number" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-[#A020F0] focus:border-[#A020F0]">
-                        <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-[#A020F0] focus:border-[#A020F0]">
+                        
+                        <!-- Main Service Dropdown -->
+                        <select id="service-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-[#A020F0] focus:border-[#A020F0]">
                             <option value="">Select Service Needed (e.g., Bodywork, Mechanical)</option>
                             <option value="Mechanical">Mechanical Repair</option>
                             <option value="Bodywork">Bodywork & Painting</option>
@@ -203,14 +303,19 @@
                             <option value="Fleet">Fleet Management Inquiry</option>
                             <option value="Insurance">Insurance Claim Assistance</option>
                         </select>
-                        <textarea placeholder="Describe your vehicle's issue" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-[#A020F0] focus:border-[#A020F0]"></textarea>
+                        
+                        <!-- Issue Description Textarea -->
+                        <textarea id="issue-description" placeholder="Describe your vehicle's issue (e.g., 'My Mercedes is making a strange ticking sound when idling')" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-[#A020F0] focus:border-[#A020F0]"></textarea>
+                        
+                        <!-- Submit Button -->
                         <button type="submit" class="w-full bg-[#A020F0] hover:bg-opacity-90 text-white font-bold py-3 rounded-lg transition duration-300 text-base shadow-md">
                             Submit Request
                         </button>
                     </form>
                 </div>
                 
-                <div class="lg:col-span-1 bg-gray-900 text-white p-6 md:p-8 rounded-lg shadow-xl">
+                <!-- Contact Details: Applied new shadow class with slow delay -->
+                <div class="lg:col-span-1 bg-gray-900 text-white p-6 md:p-8 rounded-lg premium-shadow reveal-element" style="transition-delay: 2.5s;">
                     <h3 class="text-xl md:text-2xl font-semibold mb-6">Contact Details</h3>
                     <div class="space-y-4">
                         <p class="text-base">Call Us</p>
@@ -237,7 +342,7 @@
                 <h4
                     class="text-white text-lg md:text-xl font-bold mb-3"
                 >
-                    <br />& Bodywork
+                    <br />Consolid Auto Center & Bodywork
                 </h4>
                 
                 <p class="text-xs sm:text-sm leading-snug mb-1">
@@ -319,30 +424,71 @@
 
 
     <script>
-        // Use a window.onload to ensure all elements are ready
         window.onload = function() {
             const header = document.getElementById('main-nav');
-            // Scroll distance (in pixels) to trigger the class change
             const scrollPoint = 100; 
-            
-            // Function to check scroll position and update header classes
+
+            // 1. Header Scroll Effect
             function handleScroll() {
                 if (window.scrollY > scrollPoint) {
-                    // Scrolled State: Add black background and shadow
                     header.classList.add('bg-black', 'shadow-2xl', 'backdrop-blur-sm', 'bg-opacity-95');
                     header.classList.remove('bg-transparent');
                 } else {
-                    // Top State: Remove black background and shadow
                     header.classList.remove('bg-black', 'shadow-2xl', 'backdrop-blur-sm', 'bg-opacity-95');
                     header.classList.add('bg-transparent');
                 }
             }
-
-            // Call the function once on load in case the user reloads while scrolled
             handleScroll(); 
-
-            // Attach the function to the scroll event
             window.addEventListener('scroll', handleScroll);
+
+
+            // 2. Mobile Menu Logic
+            const openMenuBtn = document.getElementById('open-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuItems = mobileMenu.querySelectorAll('[data-menu-item]');
+            const body = document.body;
+
+            function toggleMenu(forceClose = false) {
+                if (forceClose || mobileMenu.classList.contains('menu-open')) {
+                    mobileMenu.classList.remove('menu-open');
+                    body.classList.remove('mobile-menu-active');
+                } else {
+                    mobileMenu.classList.add('menu-open');
+                    body.classList.add('mobile-menu-active');
+                }
+            }
+
+            openMenuBtn.addEventListener('click', () => toggleMenu());
+            closeMenuBtn.addEventListener('click', () => toggleMenu(true));
+            menuItems.forEach(item => {
+                item.addEventListener('click', () => toggleMenu(true));
+            });
+
+            // 3. Intersection Observer (Reveal on Scroll Effect)
+            const revealElements = document.querySelectorAll('.reveal-element');
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        // Do not unobserve elements with inline style delays until they are finished (optional, but safer)
+                        // For simplicity, we unobserve immediately as the transition duration handles the reveal speed.
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            revealElements.forEach(element => {
+                if (element.id !== 'hero') { 
+                    observer.observe(element);
+                }
+            });
         };
     </script>
 
